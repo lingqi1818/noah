@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fangcloud.noah.dao.mapper.PolicyMapper">
+
+    <resultMap id="BaseResultMap" type="com.fangcloud.noah.dao.entity.PolicyEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="event_type" property="eventType" jdbcType="VARCHAR"/>
+        <result column="event_id" property="eventId" jdbcType="VARCHAR"/>
+        <result column="device_type" property="deviceType" jdbcType="INTEGER"/>
+        <result column="min_risk" property="minRisk" jdbcType="VARCHAR"/>
+        <result column="max_risk" property="maxRisk" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="action_name" property="actionName" jdbcType="VARCHAR"/>
+        <result column="eventTypeName" property="eventTypeName" jdbcType="VARCHAR"/>
+
+    </resultMap>
+
+    <sql id="base_columns">
+        id,
+        name,
+        event_type,
+        event_id,
+        device_type,
+        min_risk,
+        max_risk,
+        remark,
+        action_name
+    </sql>
+
+    <insert id="insert" parameterType="com.fangcloud.noah.dao.entity.PolicyEntity">
+        insert into policy (
+        name,
+        event_type,
+        event_id,
+        device_type,
+        min_risk,
+        max_risk,
+        remark,
+        action_name
+        )
+        values (
+        #{name,jdbcType=VARCHAR},
+        #{eventType,jdbcType=VARCHAR},
+        #{eventId,jdbcType=VARCHAR},
+        #{deviceType,jdbcType=INTEGER},
+        #{minRisk,jdbcType=INTEGER},
+        #{maxRisk,jdbcType=INTEGER},
+        #{remark,jdbcType=VARCHAR},
+        #{actionName,jdbcType=VARCHAR}
+        )
+    </insert>
+
+
+    <select id="selectPolicyCount" resultType="int">
+        SELECT
+        count(*)
+        FROM policy p
+        <where>
+            <if test="deviceType != null and deviceType != ''">
+                and p.device_type = #{deviceType}
+            </if>
+        </where>
+
+    </select>
+
+
+    <select id="selectPolicyList" resultMap="BaseResultMap">
+
+        select
+        p.id,
+        p.name,
+        p.event_type,
+        p.event_id,
+        p.device_type,
+        p.min_risk,
+        p.max_risk,
+        p.remark,
+        p.action_name,
+        et.name eventTypeName
+        from policy p join event_type et on p.event_type = et.code
+        <where>
+            <if test="deviceType != null and deviceType != ''">
+                and p.device_type = #{deviceType}
+            </if>
+        </where>
+        order by p.id limit #{rowBegin},#{rowNum}
+
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        select
+        <include refid="base_columns"/>
+        from policy p
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+
+    <select id="loadAllPolicy" resultMap="BaseResultMap">
+        select
+        <include refid="base_columns"/>
+        from policy p
+    </select>
+
+
+    <select id="selectPolicyByEventTypeAndDeviceType" resultMap="BaseResultMap">
+        select
+        <include refid="base_columns"/>
+        from policy p
+        where p.event_type = #{eventType}
+        and p.device_type = #{deviceType}
+    </select>
+
+
+    <update id="updatePolicyById" parameterType="com.fangcloud.noah.dao.entity.PolicyEntity">
+        update policy
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="eventType != null and eventType != ''">
+                event_type = #{eventType},
+            </if>
+            <if test="eventId != null and eventId != ''">
+                event_id = #{eventId},
+            </if>
+            <if test="deviceType != null">
+                device_type = #{deviceType},
+            </if>
+            <if test="minRisk != null">
+                min_risk = #{minRisk},
+            </if>
+            <if test="maxRisk != null">
+                max_risk = #{maxRisk},
+            </if>
+
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="actionName != null and actionName != ''">
+                action_name = #{actionName},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <delete id="deletePolicyById">
+        delete from policy where id = #{id}
+    </delete>
+
+
+</mapper>

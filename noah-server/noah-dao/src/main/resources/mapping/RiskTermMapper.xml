@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fangcloud.noah.dao.mapper.RiskTermMapper">
+
+    <resultMap id="BaseResultMap" type="com.fangcloud.noah.dao.entity.RiskTermEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="word" property="word" jdbcType="VARCHAR"/>
+        <result column="word_type" property="wordType" jdbcType="VARCHAR"/>
+        <result column="whole_word" property="wholeWord" jdbcType="INTEGER"/>
+        <result column="allow_skip" property="allowSkip" jdbcType="INTEGER"/>
+        <result column="weight" property="weight" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="base_columns">
+        id,
+        word,
+        word_type,
+        whole_word,
+        allow_skip,
+        weight,
+        status,
+        create_time,
+        update_time
+    </sql>
+
+    <insert id="insert" parameterType="com.fangcloud.noah.dao.entity.RiskTermEntity">
+        insert into risk_term (
+        word,
+        word_type,
+        whole_word,
+        allow_skip,
+        weight,
+        status,
+        create_time
+        )
+        values (
+        #{word,jdbcType=VARCHAR},
+        #{wordType,jdbcType=VARCHAR},
+        #{wholeWord,jdbcType=INTEGER},
+        #{allowSkip,jdbcType=INTEGER},
+        #{weight,jdbcType=INTEGER},
+        #{status,jdbcType=INTEGER},
+        #{createTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+
+
+    <select id="loadAllRecords" resultMap="BaseResultMap">
+        select
+        <include refid="base_columns"/>
+        from risk_term t  where t.status = 1
+    </select>
+
+
+    <select id="selectRiskTermList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="base_columns"></include>
+        FROM risk_term
+        where 1=1
+        <if test="word!=null and word !=''">
+            and word = #{word,jdbcType=VARCHAR}
+        </if>
+        order by id desc limit #{offSet},#{pageSize}
+    </select>
+
+    <select id="selectRiskTermListCount" resultType="int">
+        SELECT
+        count(*)
+        FROM risk_term
+        where 1=1
+        <if test="word!=null and word !=''">
+            and word = #{word,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+
+    <select id="selectById" resultMap="BaseResultMap">
+        select
+        <include refid="base_columns"/>
+        from risk_term t
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <update id="updateById" parameterType="com.fangcloud.noah.dao.entity.RiskTermEntity">
+        update risk_term
+        <set>
+            <if test="word != null and word != ''">
+                word = #{word},
+            </if>
+            <if test="wordType != null and wordType != ''">
+                word_type = #{wordType},
+            </if>
+            <if test="wholeWord != null ">
+                whole_word = #{wholeWord},
+            </if>
+            <if test="allowSkip != null ">
+                allow_skip = #{allowSkip},
+            </if>
+            <if test="weight != null">
+                weight = #{weight},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <delete id="deleteById">
+        delete from risk_term where id = #{id}
+    </delete>
+
+    <update id="updateStatus" parameterType="com.fangcloud.noah.dao.entity.RiskTermEntity">
+        update risk_term set status=#{status} where id=#{id}
+    </update>
+</mapper>

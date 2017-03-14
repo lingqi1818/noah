@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xsi:schemaLocation=
+               "http://www.springframework.org/schema/context
+          http://www.springframework.org/schema/context/spring-context-3.0.xsd
+          http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.5.xsd
+          http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+
+    <!-- <mongo:mongo  replica-set="${mongo.replicaSet}">
+        <mongo:options
+                connections-per-host="${mongo.connectionsPerHost}"
+                threads-allowed-to-block-for-connection-multiplier="${mongo.threadsAllowedToBlockForConnectionMultiplier}"
+                connect-timeout="${mongo.connectTimeout}"
+                max-wait-time="${mongo.maxWaitTime}"
+                auto-connect-retry="${mongo.autoConnectRetry}"
+                socket-keep-alive="${mongo.socketKeepAlive}"
+                socket-timeout="${mongo.socketTimeout}"
+                slave-ok="${mongo.slaveOk}"
+                write-number="${mongo.writeNumber}"
+                write-timeout="${mongo.writeTimeout}"
+                write-fsync="${mongo.writeFsync}"/>
+    </mongo:mongo> -->
+     <mongo:mongo host="127.0.0.1" port="27017" />
+
+<!--     <mongo:db-factory dbname="${mongo.dbname}" mongo-ref="mongo"  username="${mongo.username}" password="${mongo.password}"/>
+ -->
+ 	<mongo:db-factory dbname="${mongo.dbname}" mongo-ref="mongo"/>
+
+    <bean id="secondaryPreferredReadPreference" class="com.mongodb.TaggableReadPreference.SecondaryPreferredReadPreference"></bean>
+
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
+        <constructor-arg name="mongoConverter" ref="mongoConverter"/>
+        <property name="readPreference" ref="secondaryPreferredReadPreference"></property>
+    </bean>
+
+
+    <bean id="defaultMongoTypeMapper" class="org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper">
+        <constructor-arg name="typeKey">
+            <null />
+        </constructor-arg>
+    </bean>
+
+
+    <mongo:mapping-converter id="mongoConverter" base-package="com.fangcloud.noah.service.converter" type-mapper-ref="defaultMongoTypeMapper">
+        <mongo:custom-converters>
+            <mongo:converter>
+                <bean class="com.fangcloud.noah.service.converter.TimestampConverter" />
+            </mongo:converter>
+
+        </mongo:custom-converters>
+    </mongo:mapping-converter>
+
+</beans>

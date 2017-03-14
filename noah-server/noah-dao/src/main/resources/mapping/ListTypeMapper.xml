@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fangcloud.noah.dao.mapper.ListTypeMapper">
+
+    <resultMap id="BaseResultMap" type="com.fangcloud.noah.dao.entity.ListTypeEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" javaType="java.sql.Timestamp"/>
+        <result column="update_time" property="updateTime" javaType="java.sql.Timestamp"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="base_columns">
+        id,
+        name,
+        type,
+        create_time,
+        update_time,
+        remark
+    </sql>
+
+    <insert id="insert" parameterType="com.fangcloud.noah.dao.entity.ListTypeEntity">
+        insert into list_type (
+        name,
+        type,
+        create_time,
+        update_time,
+        remark
+        )
+        values (
+        #{name,jdbcType=VARCHAR},
+        #{type,jdbcType=VARCHAR},
+        #{createTime,jdbcType=TIMESTAMP},
+        #{updateTime,jdbcType=TIMESTAMP},
+        #{remark,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <select id="selectAllListTypes" resultMap="BaseResultMap">
+
+        select
+        <include refid="base_columns"/>
+        from list_type m
+        order by m.id
+    </select>
+
+</mapper>

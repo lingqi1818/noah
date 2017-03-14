@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fangcloud.noah.dao.mapper.RuleMapper">
+
+    <resultMap id="BaseResultMap" type="com.fangcloud.noah.dao.entity.RuleEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="policy_id" property="policyId" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="risk_weight" property="riskWeight" jdbcType="INTEGER"/>
+        <result column="expression" property="expression" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="valid" property="valid" jdbcType="INTEGER"/>
+        <result column="action_name" property="actionName" jdbcType="VARCHAR"/>
+        <result column="decision_config" property="decisionConfig" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="base_columns">
+        id,
+        policy_id,
+        name,
+        code,
+        risk_weight,
+        expression,
+        create_time,
+        update_time,
+        status,
+        valid,
+        action_name,
+        decision_config
+    </sql>
+
+    <insert id="insert" parameterType="com.fangcloud.noah.dao.entity.RuleEntity">
+        insert INTO rule (
+        policy_id,
+        name,
+        code,
+        risk_weight,
+        expression,
+        action_name,
+        decision_config
+        )
+        values (
+        #{policyId,jdbcType=INTEGER},
+        #{name,jdbcType=VARCHAR},
+        #{code,jdbcType=VARCHAR},
+        #{riskWeight,jdbcType=INTEGER},
+        #{expression,jdbcType=VARCHAR},
+        #{actionName,jdbcType=VARCHAR},
+        #{decisionConfig,jdbcType=VARCHAR}
+        )
+    </insert>
+
+
+    <select id="selectRuleByPolicyId" resultMap="BaseResultMap">
+        select
+        <include refid="base_columns"/>
+        FROM rule
+        where policy_id = #{policyId}
+    </select>
+
+    <select id="loadAllRule" resultMap="BaseResultMap">
+        select
+        <include refid="base_columns"/>
+        FROM rule where valid = 1 and status = 1
+    </select>
+
+
+
+    <select id="selectRuleById" resultMap="BaseResultMap">
+        select
+        <include refid="base_columns"/>
+        FROM rule
+        where id = #{id}
+    </select>
+
+
+    <update id="updateRule" parameterType="com.fangcloud.noah.dao.entity.RuleEntity">
+        update rule
+        <set>
+            <if test="policyId != null">
+                policy_id = #{policyId},
+            </if>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="code != null and code != ''">
+                code = #{code},
+            </if>
+            <if test="riskWeight != null">
+                risk_weight = #{riskWeight},
+            </if>
+            <if test="expression != null and expression != ''">
+                expression = #{expression},
+            </if>
+            <if test="valid != null">
+                valid = #{valid},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+
+            <if test="actionName != null ">
+                action_name = #{actionName},
+            </if>
+
+            <if test="decisionConfig != null ">
+                decision_config = #{decisionConfig},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <delete id="deleteRuleById">
+        delete from rule where id = #{id}
+    </delete>
+
+</mapper>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fangcloud.noah.dao.mapper.ListDataMapper">
+
+    <resultMap id="BaseResultMap" type="com.fangcloud.noah.dao.entity.ListDataEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="data_type" property="dataType" jdbcType="VARCHAR"/>
+        <result column="data_value" property="dataValue" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" javaType="java.sql.Timestamp"/>
+        <result column="update_time" property="updateTime" javaType="java.sql.Timestamp"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="dataTypeName" property="dataTypeName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="base_columns">
+        id,
+        data_type,
+        data_value,
+        create_time,
+        update_time,
+        remark
+    </sql>
+
+    <insert id="insert" parameterType="com.fangcloud.noah.dao.entity.ListDataEntity">
+        insert into list_data (
+        data_type,
+        data_value,
+        create_time,
+        update_time,
+        remark
+        )
+        values (
+        #{dataType,jdbcType=VARCHAR},
+        #{dataValue,jdbcType=VARCHAR},
+        #{createTime,jdbcType=TIMESTAMP},
+        #{updateTime,jdbcType=TIMESTAMP},
+        #{remark,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <select id="selectListDatas" resultMap="BaseResultMap">
+        SELECT
+        d.id,
+        d.data_type,
+        d.data_value,
+        d.create_time,
+        d.update_time,
+        d.remark,
+        t.name dataTypeName
+        FROM list_data d left join list_type t on d.data_type = t.type
+        where 1=1
+        <if test="dataType!=null and dataType !=''">
+            and d.data_type = #{dataType,jdbcType=VARCHAR}
+        </if>
+        <if test="dataValue!=null and dataValue !=''">
+            and d.data_value = #{dataValue,jdbcType=VARCHAR}
+        </if>
+        order by d.data_type,d.id desc limit #{offSet},#{pageSize}
+    </select>
+
+    <select id="selectListDataCount" resultType="int">
+        SELECT
+        count(*)
+        FROM list_data
+        where 1=1
+        <if test="dataType!=null and dataType !=''">
+            and data_type = #{dataType,jdbcType=VARCHAR}
+        </if>
+        <if test="dataValue!=null and dataValue !=''">
+            and data_value = #{dataValue,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="base_columns"></include>
+        FROM list_data
+        where 1=1
+        and id = #{id}
+    </select>
+
+    <select id="deleteById" resultMap="BaseResultMap">
+
+        DELETE FROM list_data
+        where 1=1
+        and id = #{id}
+    </select>
+
+
+    <select id="selectAllDatas" resultMap="BaseResultMap">
+
+        SELECT * FROM list_data
+        where 1=1
+    </select>
+
+</mapper>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        ">
+    <!-- config dubbo -->
+    <dubbo:application name="risk-ws" organization="fangcloud-risk"/>
+
+    <dubbo:protocol name="dubbo" port="${dubbo.port}"/>
+
+    <dubbo:registry id="noah-risk-registry" protocol="zookeeper"
+                    address="${noah.zookeeper.address}" />
+
+    <dubbo:monitor protocol="registry"/>
+
+    <dubbo:service interface="com.fangcloud.noah.api.api.service.RiskQueryService"
+                   ref="riskQueryService" timeout="2000"  registry="noah-risk-registry"/>
+
+    <dubbo:service interface="com.fangcloud.noah.api.api.service.RiskInvokeService"
+                   ref="riskInvokeService" timeout="2000"  registry="noah-risk-registry"/>
+
+    <dubbo:service interface="com.fangcloud.noah.api.api.service.RiskWordService"
+                   ref="riskWordService" timeout="2000"  registry="noah-risk-registry"/>
+
+    <dubbo:service interface="com.fangcloud.noah.api.api.service.NameListService"
+                   ref="nameListServiceWs" timeout="2000"  registry="noah-risk-registry"/>
+
+
+
+</beans>

@@ -1,0 +1,58 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-3.0.xsd"
+       default-autowire="byName">
+
+
+    <!-- risk 数据源配置 -->
+
+    <bean id="riskDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${mysql.jdbc.driver}" />
+        <property name="url" value="${risk.jdbc.url}" />
+        <property name="username" value="${risk.jdbc.username}" />
+        <property name="password" value="${risk.jdbc.password}"/>  
+        <property name="maxActive"><value>20</value></property>
+        <property name="initialSize"><value>1</value></property>
+        <property name="maxWait"><value>60000</value></property>
+        <property name="maxIdle"><value>20</value></property>
+        <property name="minIdle"><value>3</value></property>
+        <property name="removeAbandoned"><value>true</value></property>
+        <property name="removeAbandonedTimeout"><value>180</value></property>
+        <property name="connectionProperties"><value>clientEncoding=UTF-8</value></property>
+        <property name= "testOnBorrow" value="true" />
+        <property name= "validationQuery" value="select 1" />
+    </bean>
+
+
+
+    <bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="riskDataSource" />
+        <property name="mapperLocations" value="classpath*:mapping/*.xml" />
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.fangcloud.noah.dao.mapper" />
+        <property name="sqlSessionFactoryBeanName" value="sessionFactory" />
+    </bean>
+
+    <bean id="txRisk" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="riskDataSource" />
+    </bean>
+
+    <tx:annotation-driven transaction-manager="txRisk" />
+    
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+          <property name="dataSource" ref="riskDataSource"/>
+    </bean>
+
+</beans>

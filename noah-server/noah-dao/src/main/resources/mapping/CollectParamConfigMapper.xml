@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fangcloud.noah.dao.mapper.CollectParamConfigMapper">
+
+    <resultMap id="BaseResultMap" type="com.fangcloud.noah.dao.entity.CollectParamConfigEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="uri" property="uri" jdbcType="VARCHAR"/>
+        <result column="application_name" property="applicationName" jdbcType="VARCHAR"/>
+        <result column="event_type" property="eventType" jdbcType="VARCHAR"/>
+        <result column="switch_status" property="switchStatus" jdbcType="INTEGER"/>
+        <collection property="collectParamList" resultMap="collectParamDetailResult" />
+    </resultMap>
+
+    <!-- goodsimage resultmap -->
+    <resultMap id="collectParamDetailResult" type="com.fangcloud.noah.dao.entity.CollectParamDetailEntity">
+        <id property="id" column="id" />
+        <result column="src" property="src" jdbcType="VARCHAR"/>
+        <result column="target" property="target" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="collect_param_config_id" property="collectParamConfigId" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="base_columns">
+        id,
+        uri,
+        application_name,
+        event_type,
+        switch_status
+    </sql>
+
+    <insert id="insert" parameterType="com.fangcloud.noah.dao.entity.CollectParamConfigEntity">
+        insert into collect_param_config (
+        uri,
+        application_name,
+        event_type,
+        switch_status
+        )
+        values (
+        #{uri,jdbcType=VARCHAR},
+        #{applicationName,jdbcType=VARCHAR},
+        #{eventType,jdbcType=VARCHAR},
+        #{switchStatus,jdbcType=INTEGER}
+        )
+    </insert>
+
+
+    <select id="selectCollectParamConfigCount" resultType="int">
+        SELECT
+        count(*)
+        FROM collect_param_config p
+        <where>
+            <if test="applicationName != null and applicationName != ''">
+                and p.application_name = #{applicationName}
+            </if>
+        </where>
+
+    </select>
+
+
+    <select id="selectCollectParamConfigList" resultMap="BaseResultMap">
+
+        select
+        p.id,
+        p.uri,
+        p.application_name,
+        p.event_type,
+        p.switch_status
+        from collect_param_config p
+        <where>
+            <if test="applicationName != null and applicationName != ''">
+                and p.application_name = #{applicationName}
+            </if>
+        </where>
+        order by p.application_name,p.event_type,p.id limit #{rowBegin},#{rowNum}
+
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        select
+        <include refid="base_columns"/>
+        from collect_param_config c
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+
+
+
+    <update id="updatePolicyById" parameterType="com.fangcloud.noah.dao.entity.PolicyEntity">
+        update collect_param_config
+        <set>
+            <if test="uri != null and uri != ''">
+                uri = #{uri},
+            </if>
+            <if test="eventType != null and eventType != ''">
+                event_type = #{eventType},
+            </if>
+            <if test="applicationName != null and applicationName != ''">
+                application_name = #{applicationName},
+            </if>
+            <if test="switchStatus != null">
+                switch_status = #{switchStatus},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <delete id="deleteById">
+        delete from collect_param_config where id = #{id}
+    </delete>
+
+
+
+
+    <select id="selectCollectParamConfigListWithDetail" resultMap="BaseResultMap">
+
+       select
+        p.id,
+        p.uri,
+        p.application_name,
+        p.event_type,
+        p.switch_status,
+        d.id d_id,
+        d.src,
+        d.target,
+        d.type,
+        d.collect_param_config_id
+        from collect_param_config p
+        join collect_param_detail d
+        on p.id  = d.collect_param_config_id
+        order by p.application_name
+
+    </select>
+
+
+
+
+
+</mapper>

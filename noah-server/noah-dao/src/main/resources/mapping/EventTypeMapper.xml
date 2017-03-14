@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fangcloud.noah.dao.mapper.EventTypeMapper">
+
+    <resultMap id="BaseResultMap" type="com.fangcloud.noah.dao.entity.EventType">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="base_columns">
+        id,
+        code,
+        name,
+        remark
+    </sql>
+
+    <insert id="insert" parameterType="com.fangcloud.noah.dao.entity.EventType">
+        insert into event_type (
+        code,
+        name,
+        remark
+        )
+        values (
+        #{code,jdbcType=VARCHAR},
+        #{name,jdbcType=VARCHAR},
+        #{remark,jdbcType=VARCHAR}
+        )
+    </insert>
+
+
+    <select id="selectEventTypeCount" resultType="int">
+        SELECT
+        count(*)
+        FROM event_type p
+    </select>
+
+
+    <select id="selectEventTypeList" resultMap="BaseResultMap">
+
+        select
+        <include refid="base_columns"/>
+        from event_type p
+
+        order by id limit #{rowBegin},#{rowNum}
+
+    </select>
+
+
+    <select id="selectAllEventTyps" resultMap="BaseResultMap">
+
+        select
+        <include refid="base_columns"/>
+        from event_type p
+    </select>
+
+</mapper>

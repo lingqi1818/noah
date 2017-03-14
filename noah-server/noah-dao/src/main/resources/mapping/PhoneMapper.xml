@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fangcloud.noah.dao.mapper.PhoneMapper">
+
+    <resultMap id="BaseResultMap" type="com.fangcloud.noah.dao.entity.PhoneEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="pref" property="pref" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="province" property="province" jdbcType="VARCHAR"/>
+        <result column="city" property="city" jdbcType="INTEGER"/>
+        <result column="isp" property="isp" jdbcType="VARCHAR"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="zip" property="zip" jdbcType="VARCHAR"/>
+        <result column="types" property="types" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="base_columns">
+        id,
+        pref,
+        phone,
+        province,
+        city,
+        isp,
+        code,
+        zip,
+        types
+    </sql>
+
+
+
+
+    <select id="selectByPhone7" resultMap="BaseResultMap">
+        select
+        <include refid="base_columns"/>
+        from phone
+        where  phone =#{phone,jdbcType=VARCHAR} LIMIT 1
+    </select>
+
+
+
+</mapper>

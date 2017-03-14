@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<function-configuration>
+    <bean class="org.wltea.expression.function.SystemFunctions">
+        <function name="CONTAINS" method="contains">
+            <parameter-type>java.lang.String</parameter-type>
+            <parameter-type>java.lang.String</parameter-type>
+        </function>
+        <function name="STARTSWITH" method="startsWith">
+            <parameter-type>java.lang.String</parameter-type>
+            <parameter-type>java.lang.String</parameter-type>
+        </function>
+        <function name="ENDSWITH" method="endsWith">
+            <parameter-type>java.lang.String</parameter-type>
+            <parameter-type>java.lang.String</parameter-type>
+        </function>
+        <function name="CALCDATE" method="calcDate">
+            <parameter-type>java.util.Date</parameter-type>
+            <parameter-type>int</parameter-type>
+            <parameter-type>int</parameter-type>
+            <parameter-type>int</parameter-type>
+            <parameter-type>int</parameter-type>
+            <parameter-type>int</parameter-type>
+            <parameter-type>int</parameter-type>
+        </function>
+        <function name="SYSDATE" method="sysDate" />
+        <function name="DAYEQUALS" method="dayEquals">
+            <parameter-type>java.util.Date</parameter-type>
+            <parameter-type>java.util.Date</parameter-type>
+        </function>
+    </bean>
+
+
+    <bean class="com.fangcloud.noah.service.ikfunction.CountFunction">
+        <function name="ct" method="count">
+            <parameter-type>java.lang.String</parameter-type>
+            <parameter-type>java.lang.String</parameter-type>
+            <parameter-type>java.lang.String</parameter-type>
+            <parameter-type>int</parameter-type>
+        </function>
+
+        <function name="uc" method="unionCount">
+            <parameter-type>java.lang.String</parameter-type>
+            <parameter-type>java.lang.String</parameter-type>
+            <parameter-type>java.lang.String</parameter-type>
+            <parameter-type>java.lang.String</parameter-type>
+            <parameter-type>int</parameter-type>
+        </function>
+
+        <function name="cr" method="countRelation">
+            <parameter-type>java.lang.String</parameter-type>
+            <parameter-type>java.lang.String</parameter-type>
+            <parameter-type>java.lang.String</parameter-type>
+            <parameter-type>java.lang.String</parameter-type>
+            <parameter-type>int</parameter-type>
+        </function>
+        
+        <function name="dcr" method="countRelationRiskTerm">
+            <parameter-type>java.lang.String</parameter-type>
+            <parameter-type>java.lang.String</parameter-type>
+            <parameter-type>java.lang.String</parameter-type>
+            <parameter-type>java.lang.String</parameter-type>
+            <parameter-type>int</parameter-type>
+        </function>
+
+        <function name="failCount" method="failCount">
+            <parameter-type>java.lang.String</parameter-type>
+            <parameter-type>java.lang.String</parameter-type>
+            <parameter-type>java.lang.String</parameter-type>
+            <parameter-type>java.lang.String</parameter-type>
+            <parameter-type>int</parameter-type>
+        </function>
+
+    </bean>
+
+   <!--  <bean class="com.fangcloud.noah.service.ikfunction.FraudFunction">
+        <function name="invokeFraud" method="invokeFraud">
+            <parameter-type>java.lang.String</parameter-type>
+        </function>
+    </bean> -->
+
+    <bean class="com.fangcloud.noah.service.ikfunction.RiskTermFunction">
+        <function name="containTerm" method="containTerm">
+            <parameter-type>java.lang.String</parameter-type>
+        </function>
+    </bean>
+
+    <bean class="com.fangcloud.noah.service.ikfunction.ListFunction">
+        <function name="inList" method="inList">
+            <parameter-type>java.lang.String</parameter-type>
+            <parameter-type>java.lang.String</parameter-type>
+        </function>
+
+        <function name="notInList" method="notInList">
+            <parameter-type>java.lang.String</parameter-type>
+            <parameter-type>java.lang.String</parameter-type>
+        </function>
+    </bean>
+
+</function-configuration>

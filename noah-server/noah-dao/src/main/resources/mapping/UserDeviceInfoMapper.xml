@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fangcloud.noah.dao.mapper.UserDeviceInfoMapper">
+    <sql id="base_columns">
+        id,
+        user_account,
+        user_id,
+        user_type,
+        device_type,
+        sign_ver,
+        device_id,
+        cpu_id,
+        cpu_mode,
+        valid,
+        create_time,
+        update_time
+    </sql>
+
+    <resultMap id="BaseResultMap" type="com.fangcloud.noah.dao.entity.UserDeviceInfoEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="user_account" property="userAccount" jdbcType="VARCHAR"/>
+        <result column="user_id" property="userId" jdbcType="VARCHAR"/>
+        <result column="user_type" property="userType" jdbcType="INTEGER"/>
+        <result column="device_type" property="deviceType" jdbcType="INTEGER"/>
+        <result column="sign_ver" property="signVer" jdbcType="VARCHAR"/>
+        <result column="device_id" property="deviceId" jdbcType="INTEGER"/>
+        <result column="cpu_id" property="cpuId" jdbcType="INTEGER"/>
+        <result column="cpu_mode" property="cpuMode" jdbcType="INTEGER"/>
+        <result column="valid" property="valid" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.fangcloud.noah.dao.entity.UserDeviceInfoEntity">
+        insert INTO user_device_info (
+        user_account,
+        user_id,
+        user_type,
+        device_type,
+        sign_ver,
+        device_id,
+        cpu_id,
+        cpu_mode,
+        valid,
+        create_time,
+        update_time
+        )
+        values (
+        #{userAccount,jdbcType=VARCHAR},
+        #{userId,jdbcType=VARCHAR},
+        #{userType,jdbcType=INTEGER},
+        #{deviceType,jdbcType=INTEGER},
+        #{signVer,jdbcType=VARCHAR},
+        #{deviceId,jdbcType=VARCHAR},
+        #{cpuId,jdbcType=VARCHAR},
+        #{cpuMode,jdbcType=VARCHAR},
+        #{valid,jdbcType=INTEGER},
+        #{createTime,jdbcType=TIMESTAMP},
+        #{updateTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <select id="selectUserDeviceInfos" resultMap="BaseResultMap">
+        select
+        <include refid="base_columns"/>
+        from user_device_info d
+        <where>
+            <if test="userAccount != null and userAccount != ''">
+                and d.user_account = #{userAccount}
+            </if>
+            <if test="userId != null and userId != ''">
+                and d.user_id = #{userId}
+            </if>
+            <if test="userType != null ">
+                and d.user_type = #{userType}
+            </if>
+            <if test="deviceId != null and deviceId != ''">
+                and d.device_id = #{deviceId}
+            </if>
+            <if test="valid != null ">
+                and d.valid = #{valid}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="selectUserDeviceInfoByUserAndDeviceId" resultMap="BaseResultMap">
+        select
+        <include refid="base_columns"/>
+        from user_device_info d
+        <where>
+            <if test="userAccount != null and userAccount != ''">
+                and d.user_account = #{userAccount}
+            </if>
+            <if test="userType != null ">
+                and d.user_type = #{userType}
+            </if>
+            <if test="deviceId != null and deviceId != ''">
+                and d.device_id = #{deviceId}
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <select id="selectUserDeviceInfoCount" resultType="int">
+        SELECT
+        count(*)
+        FROM user_device_info d
+        <where>
+            <if test="userAccount != null and userAccount != ''">
+                and d.user_account = #{userAccount}
+            </if>
+            <if test="deviceId != null and deviceId != ''">
+                and d.device_id = #{deviceId}
+            </if>
+        </where>
+        order by d.create_time
+
+    </select>
+
+    <select id="selectUserDeviceInfoList" resultMap="BaseResultMap">
+        select
+        <include refid="base_columns"/>
+        FROM user_device_info d
+        <where>
+            <if test="userAccount != null and userAccount != ''">
+                and d.user_account = #{userAccount}
+            </if>
+            <if test="deviceId != null and deviceId != ''">
+                and d.device_id = #{deviceId}
+            </if>
+        </where>
+        order by id desc limit #{rowBegin},#{rowNum}
+    </select>
+
+    <select id="selectUserDeviceInfoByUserAccount" resultMap="BaseResultMap">
+        select
+        <include refid="base_columns"/>
+        FROM user_device_info d
+        <where>
+            <if test="userAccount != null and userAccount != ''">
+                and d.user_account = #{userAccount}
+            </if>
+        </where>
+        order by id desc  limit 1
+    </select>
+
+
+    <select id="selectUserDeviceInfoByDeviceId" resultMap="BaseResultMap">
+        select
+        <include refid="base_columns"/>
+        FROM user_device_info d
+        <where>
+            <if test="deviceId != null and deviceId != ''">
+                and d.device_id = #{deviceId}
+            </if>
+        </where>
+        order by id desc  limit 5
+    </select>
+
+
+
+    <select id="selectUserDeviceInfoListByUserAccount" resultMap="BaseResultMap">
+        select
+        <include refid="base_columns"/>
+        FROM user_device_info d
+        <where>
+            <if test="userAccount != null and userAccount != ''">
+                and d.user_account = #{userAccount}
+            </if>
+        </where>
+        order by id desc  limit 100
+    </select>
+
+
+
+
+
+</mapper>

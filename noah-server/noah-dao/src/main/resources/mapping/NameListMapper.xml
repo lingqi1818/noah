@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fangcloud.noah.dao.mapper.NameListMapper">
+
+    <resultMap id="BaseResultMap" type="com.fangcloud.noah.api.api.model.NameList">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="type" property="type"/>
+        <result column="grade" property="grade"/>
+        <result column="gmt_created" property="gmtCreated" javaType="java.sql.Timestamp"/>
+        <result column="gmt_modified" property="gmtModified" javaType="java.sql.Timestamp"/>
+        <result column="status" property="status"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="base_columns">
+        id,
+        content,
+        type,
+        grade,
+        gmt_created,
+        gmt_modified,
+        status,
+        remark
+    </sql>
+
+    <insert id="insert" parameterType="com.fangcloud.noah.api.api.model.NameList">
+        insert ignore into name_list (
+        content,
+        type,
+        grade,
+        gmt_created,
+        gmt_modified,
+        status,
+        remark)
+        values (
+        #{content,jdbcType=VARCHAR},
+        #{type,jdbcType=INTEGER},
+        #{grade,jdbcType=INTEGER},
+        #{gmtCreated,jdbcType=TIMESTAMP},
+        #{gmtModified,jdbcType=TIMESTAMP},
+        #{status,jdbcType=INTEGER},
+        #{remark,jdbcType=VARCHAR})
+    </insert>
+
+    <update id="update" parameterType="com.fangcloud.noah.api.api.model.NameList">
+        update name_list
+        <set>
+            <if test="content != null and content != ''">
+                content = #{content},
+            </if>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="grade != null">
+                grade = #{grade},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            gmt_modified = now()
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="selectNameListForSync" resultMap="BaseResultMap">
+        SELECT
+        <include refid="base_columns"></include>
+
+        FROM name_list
+        where
+        <![CDATA[
+        gmt_created > #{startTime}
+        ]]>
+        and status = 0 and type=1 and grade = 1
+    </select>
+
+
+    <update id="updateNameListStatus" parameterType="com.fangcloud.noah.api.api.model.NameList">
+       update name_list set status=#{status} where id=#{id}
+    </update>
+
+
+    <select id="selectNameListByContent" resultMap="BaseResultMap">
+        SELECT
+        <include refid="base_columns"></include>
+        FROM name_list
+        where
+        type = #{type}
+        and content = #{content}
+        and status != 3
+    </select>
+
+    <select id="selectNameListById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="base_columns"></include>
+        FROM name_list
+        where
+        id = #{nameId}
+    </select>
+
+    <select id="selectNameList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="base_columns"></include>
+        FROM name_list
+        where 1=1
+        <if test="nameType != null">
+            and type = #{nameType,jdbcType=INTEGER}
+        </if>
+        <if test="nameGrade != null">
+            and grade = #{nameGrade,jdbcType=INTEGER}
+        </if>
+        <if test="content!=null and content !=''">
+            and content = #{content,jdbcType=INTEGER}
+        </if>
+        order by id desc limit #{rowBegin},#{rowNum}
+    </select>
+
+    <select id="selectNameListCount" resultType="int">
+        SELECT
+        count(*)
+        FROM name_list
+        where 1=1
+        <if test="nameType != null">
+            and type = #{nameType,jdbcType=INTEGER}
+        </if>
+        <if test="nameGrade != null">
+            and grade = #{nameGrade,jdbcType=INTEGER}
+        </if>
+        <if test="content!=null and content !=''">
+            and content = #{content,jdbcType=INTEGER}
+        </if>
+
+    </select>
+
+
+</mapper>

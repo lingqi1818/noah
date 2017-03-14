@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8">
+<title>风控邮件预警</title>
+<style>
+    table {
+        border-collapse: collapse;
+    }
+
+    table, td, th {
+        border: 1px solid black;
+    }
+    div{
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    平台新客券用券异常情况统计.
+    <br/>
+    统计时间：过去 ${days} 天内
+</div>
+<div>
+    <span>同一个手艺人订单使用平台新客券数量大于等于${artisanCouponLimitCount}</span>
+
+    <table >
+        <thead>
+            <th>手艺人id</th>
+            <th>手艺人昵称</th>
+            <th>用券数量</th>
+        </thead>
+        <tbody>
+
+        #foreach($data in $artisanCouponResult)
+            <tr>
+                <td>$data.get('artisan_id')</td>
+                <td>$data.get('nick')</td>
+                <td>$data.get('num')</td>
+            </tr>
+        #end
+
+        </tbody>
+    </table>
+</div>
+
+
+<div>
+    <span>同一个支付账号使用平台新客券数量大于等于${accountCouponLimitCount}</span>
+
+    <table style="border:1px;background-color:transparent;">
+        <thead>
+            <th>支付账号</th>
+            <th>用券数量</th>
+        </thead>
+        <tbody>
+            #foreach($data in $payAccountCouponResult)
+            <tr>
+                <td>$data.get('account')</td>
+                <td>$data.get('num')</td>
+            </tr>
+
+            #end
+
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
